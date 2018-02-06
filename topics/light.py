@@ -19,6 +19,7 @@ from topics.three_dimensions import *
 
 from scipy.spatial import ConvexHull
 
+import traceback
 
 LIGHT_COLOR = YELLOW
 SWITCH_ON_RUN_TIME = 1.5
@@ -129,6 +130,9 @@ class LightSource(VMobject):
         # in any case
         self.screen = new_screen
 
+
+
+
     def move_source_to(self,point):
         print "LightSource.move_source_to"
         apoint = np.array(point)
@@ -136,10 +140,16 @@ class LightSource(VMobject):
         self.source_point = apoint
         self.lighthouse.next_to(apoint,DOWN,buff = 0)
         self.ambient_light.move_source_to(apoint)
-        if self.has_screen():
-            self.spotlight.move_source_to(point)
-        self.update()
+        #if self.has_screen():
+        #    self.spotlight.move_source_to(apoint)
+        #self.update()
         return self
+
+
+
+
+
+
         
     def set_radius(self,new_radius):
         self.radius = new_radius
@@ -302,19 +312,30 @@ class AmbientLight(VMobject):
 
 
     def move_source_to(self,point):
-        print "AmbientLight.move_source_to"
+
+
+        for line in traceback.format_stack():
+            print line.strip()
+
+        print "AmbientLight.move_source_to blablub"
         v = np.array(point) - self.source_point
+        print "test"
         self.source_point = np.array(point)
-        for submob in self.submobjects:
-            submob.shift(v)
+        self.shift(v)
         return self
+
+
+
+
+
+
 
     def dimming(self,new_alpha):
         old_alpha = self.max_opacity
         self.max_opacity = new_alpha
         for submob in self.submobjects:
             old_submob_alpha = submob.fill_opacity
-            new_submob_alpha = old_submob_alpha * new_alpha/old_alpha
+            new_submob_alpha = old_submob_alpha * new_alpha / old_alpha
             submob.set_fill(opacity = new_submob_alpha)
 
 
