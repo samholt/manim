@@ -1,34 +1,6 @@
-from helpers import *
-
-from mobject.tex_mobject import TexMobject
-from mobject import Mobject
-from mobject.image_mobject import ImageMobject
-from mobject.vectorized_mobject import *
-
-from animation.animation import Animation
-from animation.transform import *
-from animation.simple_animations import *
-from animation.playground import *
-from topics.geometry import *
-from topics.characters import *
-from topics.functions import *
-from topics.fractals import *
-from topics.number_line import *
-from topics.combinatorics import *
-from topics.numerals import *
-from topics.three_dimensions import *
-from topics.objects import *
-from scene import Scene
-from scene.zoomed_scene import ZoomedScene
-from camera import Camera
-from mobject.svg_mobject import *
-from mobject.tex_mobject import *
-
-
-from topics.common_scenes import OpeningQuote, PatreonThanks
+from big_ol_pile_of_manim_imports import *
 from old_projects.eoc.chapter2 import DISTANCE_COLOR, TIME_COLOR, \
     VELOCITY_COLOR, Car, MoveCar
-from topics.graph_scene import *
 
 OUTPUT_COLOR = DISTANCE_COLOR
 INPUT_COLOR = TIME_COLOR
@@ -68,14 +40,14 @@ class PoseAbstractDerivative(TeacherStudentsScene):
 
 class ContrastAbstractAndConcrete(Scene):
     def construct(self):
-        v_line = Line(UP, DOWN).scale(SPACE_HEIGHT)
+        v_line = Line(UP, DOWN).scale(FRAME_Y_RADIUS)
         l_title = TextMobject("Abstract functions")
-        l_title.shift(SPACE_WIDTH*LEFT/2)
+        l_title.shift(FRAME_X_RADIUS*LEFT/2)
         l_title.to_edge(UP)
         r_title = TextMobject("Applications")
-        r_title.shift(SPACE_WIDTH*RIGHT/2)
+        r_title.shift(FRAME_X_RADIUS*RIGHT/2)
         r_title.to_edge(UP)
-        h_line = Line(LEFT, RIGHT).scale(SPACE_WIDTH)
+        h_line = Line(LEFT, RIGHT).scale(FRAME_X_RADIUS)
         h_line.shift((r_title.get_bottom()[1]-MED_SMALL_BUFF)*UP)
 
         functions = VGroup(*map(TexMobject, [
@@ -89,7 +61,7 @@ class ContrastAbstractAndConcrete(Scene):
             aligned_edge = LEFT,
             buff = LARGE_BUFF
         )
-        functions.shift(SPACE_WIDTH*LEFT/2)
+        functions.shift(FRAME_X_RADIUS*LEFT/2)
         functions[-1].shift(MED_LARGE_BUFF*RIGHT)
 
         self.add(l_title, r_title)
@@ -132,7 +104,7 @@ class ContrastAbstractAndConcrete(Scene):
         for spring in compact_spring, extended_spring:
             spring.scale(0.5)
             spring.rotate(np.pi/6, UP)
-            spring.highlight(GREY)
+            spring.set_color(GREY)
             spring.next_to(ORIGIN, RIGHT)
             spring.shift(
                 alignement_mob.get_center()[1]*UP + SMALL_BUFF*RIGHT \
@@ -170,7 +142,7 @@ class ContrastAbstractAndConcrete(Scene):
         pis.scale_to_fit_height(3)
         pis.center()
         pis.to_edge(DOWN, buff = SMALL_BUFF)
-        pis.shift(SPACE_WIDTH*RIGHT/2.)
+        pis.shift(FRAME_X_RADIUS*RIGHT/2.)
 
         anims = []
         for index, pi in enumerate(pis):
@@ -223,7 +195,7 @@ class ListOfRules(PiCreatureScene):
             aligned_edge = LEFT,
         )
         rules[-1].shift(MED_LARGE_BUFF*RIGHT)
-        rules.scale_to_fit_height(2*SPACE_HEIGHT-1)
+        rules.scale_to_fit_height(FRAME_HEIGHT-1)
         rules.next_to(self.pi_creature, RIGHT)
         rules.to_edge(DOWN)
 
@@ -245,7 +217,7 @@ class DerivativeOfXSquaredAsGraph(GraphScene, ZoomedScene, PiCreatureScene):
         "little_rect_nudge" : 0.5*(1.5*UP+RIGHT),
         "graph_origin" : 2.5*DOWN + LEFT,
         "zoomed_canvas_corner" : UP+LEFT,
-        "zoomed_canvas_space_shape" : (4, 4),
+        "zoomed_canvas_frame_shape" : (4, 4),
     }
     def construct(self):
         self.draw_graph()
@@ -285,8 +257,8 @@ class DerivativeOfXSquaredAsGraph(GraphScene, ZoomedScene, PiCreatureScene):
         ]
 
         df_dx = TexMobject("\\frac{df}{dx} ?")
-        VGroup(*df_dx[:2]).highlight(ss_group.df_line.get_color())
-        VGroup(*df_dx[3:5]).highlight(ss_group.dx_line.get_color())
+        VGroup(*df_dx[:2]).set_color(ss_group.df_line.get_color())
+        VGroup(*df_dx[3:5]).set_color(ss_group.dx_line.get_color())
         df_dx.next_to(
             self.input_to_graph_point(self.start_x, self.graph),
             DOWN+RIGHT,
@@ -380,7 +352,7 @@ class DerivativeOfXSquaredAsGraph(GraphScene, ZoomedScene, PiCreatureScene):
         self.disactivate_zooming()
         self.play(
             ApplyMethod(
-                everything.shift, 2*SPACE_WIDTH*LEFT,
+                everything.shift, FRAME_WIDTH*LEFT,
                 rate_func = lambda t : running_start(t, -0.1)
             ),
             self.pi_creature.change_mode, "happy"
@@ -407,7 +379,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
         self.introduce_square()
         self.increase_area()
         self.write_df_equation()
-        self.highlight_shapes()
+        self.set_color_shapes()
         self.examine_thin_rectangles()
         self.examine_tiny_square()
         self.show_smaller_dx()
@@ -492,7 +464,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
                 buff = SMALL_BUFF,
             )
             text = brace.get_text("$dx$", buff = SMALL_BUFF)
-            text.highlight(self.dx_color)
+            text.set_color(self.dx_color)
             brace.add(text)
             little_braces.add(brace)
 
@@ -532,7 +504,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
         corner_square = self.corner_square
 
         df_equation = VGroup(
-            TexMobject("df").highlight(right_rect.get_color()),
+            TexMobject("df").set_color(right_rect.get_color()),
             TexMobject("="),
             right_rect.copy(),
             TextMobject("+"),
@@ -574,7 +546,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
 
         self.df_equation = df_equation
 
-    def highlight_shapes(self):
+    def set_color_shapes(self):
         df, equals, r1, plus1, r2, plus2, s = self.df_equation
 
         tups = [
@@ -584,7 +556,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
         for tup in tups:
             self.play(
                 *it.chain(*[
-                    [m.scale_in_place, 1.2, m.highlight, RED]
+                    [m.scale_in_place, 1.2, m.set_color, RED]
                     for m in tup
                 ]), 
                 rate_func = there_and_back
@@ -597,11 +569,11 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
         rects = VGroup(r1, r2)
         thin_rect_brace = Brace(rects, DOWN)
         text = thin_rect_brace.get_text("$2x \\, dx$")
-        VGroup(*text[-2:]).highlight(self.dx_color)
+        VGroup(*text[-2:]).set_color(self.dx_color)
         text.save_state()
         alt_text = thin_rect_brace.get_text("$2(3)(0.01)$")
-        alt_text[2].highlight(self.three_color)
-        VGroup(*alt_text[-5:-1]).highlight(self.dx_color)
+        alt_text[2].set_color(self.three_color)
+        VGroup(*alt_text[-5:-1]).set_color(self.dx_color)
 
         example_value = TexMobject("=0.06")
         example_value.next_to(alt_text, DOWN)
@@ -626,7 +598,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
             group.generate_target()            
             for submob in group.target:
                 number = TexMobject(tex)
-                number.highlight(color)
+                number.set_color(color)
                 number.move_to(submob, LEFT)
                 Transform(submob, number).update(1)
         self.play(MoveToTarget(xs))
@@ -654,7 +626,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
 
     def examine_tiny_square(self):
         text = TexMobject("dx^2")
-        VGroup(*text[:2]).highlight(self.dx_color)
+        VGroup(*text[:2]).set_color(self.dx_color)
         text.next_to(self.df_equation[-1], UP)
         text.save_state()
         alt_text = TextMobject("0.0001")
@@ -669,7 +641,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
         )
         for submob in self.dxs.target:
             number = TexMobject("0.01")
-            number.highlight(self.dx_color)
+            number.set_color(self.dx_color)
             number.move_to(submob, LEFT)
             Transform(submob, number).update(1)
         self.play(MoveToTarget(self.dxs))
@@ -723,7 +695,7 @@ class NudgeSideLengthOfSquare(PiCreatureScene):
         circle.scale_in_place(1.5)
         safe_to_ignore = TextMobject("Safe to ignore")
         safe_to_ignore.next_to(circle, DOWN, aligned_edge = LEFT)
-        safe_to_ignore.highlight(circle.get_color())
+        safe_to_ignore.set_color(circle.get_color())
 
         self.play(ShowCreation(circle))
         self.play(
@@ -808,8 +780,8 @@ class ChangeInAreaOverChangeInX(Scene):
         fractions = []
         for pair in ("Change in area", "Change in $x$"), ("$d(x^2)$", "$dx$"):
             top, bottom = map(TextMobject, pair)
-            top.highlight(YELLOW)
-            bottom.highlight(BLUE_B)
+            top.set_color(YELLOW)
+            bottom.set_color(BLUE_B)
             frac_line = TexMobject("-")
             frac_line.stretch_to_fit_width(top.get_width())
             top.next_to(frac_line, UP, SMALL_BUFF)
@@ -856,7 +828,7 @@ class NudgeSideLengthOfCube(Scene):
 
     def add_title(self):
         title = TexMobject("f(x) = x^3")
-        title.shift(SPACE_WIDTH*LEFT/2)
+        title.shift(FRAME_X_RADIUS*LEFT/2)
         title.to_edge(UP)
         self.play(Write(title))
         self.wait()
@@ -931,7 +903,7 @@ class NudgeSideLengthOfCube(Scene):
             self.corner_cube.copy()
         )
         df, equals, faces, plus1, bars, plus2, corner_cube = df_equation
-        df.highlight(self.df_color)
+        df.set_color(self.df_color)
         for three_d_mob in faces, bars, corner_cube:
             three_d_mob.scale(self.small_piece_scaling_factor)
             # self.pose_3d_mobject(three_d_mob)
@@ -941,7 +913,7 @@ class NudgeSideLengthOfCube(Scene):
         df_equation.to_edge(UP)
 
         faces_brace = Brace(faces, DOWN)
-        derivative = faces_brace.get_text("$3x^2", "\\, dx$")
+        derivative = faces_brace.get_tex("3x^2", "\\, dx")
         extras_brace = Brace(VGroup(bars, corner_cube), DOWN)
         ignore_text = extras_brace.get_text(
             "Multiple \\\\ of $dx^2$"
@@ -956,14 +928,14 @@ class NudgeSideLengthOfCube(Scene):
         self.shrink_dx("Faces are introduced")
         face = self.faces[0]
         face.save_state()
-        self.play(face.shift, SPACE_WIDTH*RIGHT)
+        self.play(face.shift, FRAME_X_RADIUS*RIGHT)
         x_squared_dx.next_to(face, LEFT)
         self.play(Write(x_squared_dx, run_time = 1))
         self.wait()
         for submob, sides in zip(x_squared_dx, [face[0], VGroup(*face[1:])]):
             self.play(
-                submob.highlight, RED,
-                sides.highlight, RED,
+                submob.set_color, RED,
+                sides.set_color, RED,
                 rate_func = there_and_back
             )
             self.wait()
@@ -1044,7 +1016,7 @@ class NudgeSideLengthOfCube(Scene):
         self.play(
             FadeOut(frac_line2),
             FadeOut(dx_below_dx_squared),
-            dx_squared[-1].highlight, BLACK,
+            dx_squared[-1].set_color, BLACK,
             inner_dx.next_to, extra_stuff[0], RIGHT, SMALL_BUFF
         )
         self.wait()
@@ -1071,7 +1043,7 @@ class NudgeSideLengthOfCube(Scene):
             piece.target.rotate_in_place(
                 np.pi/12, piece.get_center()-self.cube.get_center()
             )
-            piece.target.highlight(RED)
+            piece.target.set_color(RED)
         self.play(*map(MoveToTarget, start_pieces), rate_func = wiggle)
         self.wait()
         added_anims = []
@@ -1177,7 +1149,6 @@ class NudgeSideLengthOfCube(Scene):
     def get_corner_cube(self):
         return self.get_prism(self.dx, self.dx,  self.dx)
 
-
     def get_prism(self, width, height, depth):
         color_kwargs = {
             "fill_color" : YELLOW,
@@ -1228,11 +1199,11 @@ class GraphOfXCubed(GraphScene):
     CONFIG = {
         "x_min" : -6,
         "x_max" : 6,
-        "x_axis_width" : 2*SPACE_WIDTH,
+        "x_axis_width" : FRAME_WIDTH,
         "x_labeled_nums" : range(-6, 7),
         "y_min" : -35,
         "y_max" : 35,
-        "y_axis_height" : 2*SPACE_HEIGHT,
+        "y_axis_height" : FRAME_HEIGHT,
         "y_tick_frequency" : 5,
         "y_labeled_nums" : range(-30, 40, 10),
         "graph_origin" : ORIGIN,
@@ -1324,13 +1295,13 @@ class PatternForPowerRule(PiCreatureScene):
                 "\\frac{d(x^%d)}{dx} = "%exponent,
                 "%d x^{%d}"%(exponent, exponent-1)
             )
-            VGroup(*derivative[0][2:4]).highlight(color)
+            VGroup(*derivative[0][2:4]).set_color(color)
             derivatives.add(derivative)
         derivatives.arrange_submobjects(
             DOWN, aligned_edge = LEFT,
             buff = MED_LARGE_BUFF
         )
-        derivatives.scale_to_fit_height(2*SPACE_HEIGHT-1)
+        derivatives.scale_to_fit_height(FRAME_HEIGHT-1)
         derivatives.to_edge(LEFT)
 
         self.play(FadeIn(derivatives[0]))
@@ -1407,7 +1378,7 @@ class PatternForPowerRule(PiCreatureScene):
                 "x^",
                 str(exp-1)
             )
-            form.highlight(color)
+            form.set_color(color)
             form.to_corner(UP+RIGHT, buff = LARGE_BUFF)
             lhs = VGroup(*form[:2])
             lhs_copy = lhs.copy()
@@ -1454,10 +1425,10 @@ class PowerRuleAlgebra(Scene):
             *paren_strings*3+["\\cdots"]+paren_strings
         )
 
-        x_to_n.highlight(self.x_color)
+        x_to_n.set_color(self.x_color)
         for mob in x_dx_to_n, full_product:
-            mob.highlight_by_tex("dx", self.dx_color)
-            mob.highlight_by_tex("x", self.x_color)
+            mob.set_color_by_tex("dx", self.dx_color)
+            mob.set_color_by_tex("x", self.x_color)
 
         nudge_group = VGroup(x_to_n, down_arrow, x_dx_to_n)
         nudge_group.arrange_submobjects(DOWN)
@@ -1505,15 +1476,15 @@ class PowerRuleAlgebra(Scene):
         x_to_n = TexMobject("x^n")
         extra_stuff = TexMobject("+(\\text{Multiple of }\\, dx^2)")
         # extra_stuff.scale(0.8)
-        VGroup(*extra_stuff[-4:-2]).highlight(self.dx_color)
+        VGroup(*extra_stuff[-4:-2]).set_color(self.dx_color)
 
         x_to_n.next_to(equals, RIGHT, align_using_submobjects = True)
-        x_to_n.highlight(self.x_color)
+        x_to_n.set_color(self.x_color)
 
         xs_copy = xs.copy()
         full_product.save_state()
-        self.play(full_product.highlight, WHITE)
-        self.play(xs_copy.highlight, self.x_color)
+        self.play(full_product.set_color, WHITE)
+        self.play(xs_copy.set_color, self.x_color)
         self.play(
             Write(equals),
             Transform(xs_copy, x_to_n)
@@ -1564,8 +1535,8 @@ class PowerRuleAlgebra(Scene):
             xs_copy = xs.copy()
             xs_copy.remove(xs_copy[dx_index])
             self.play(
-                dx_copy.highlight, self.dx_color,
-                xs_copy.highlight, self.x_color,
+                dx_copy.set_color, self.dx_color,
+                xs_copy.set_color, self.x_color,
                 rate_func = squish_rate_func(smooth, 0, 0.5)
             )
 
@@ -1597,8 +1568,8 @@ class PowerRuleAlgebra(Scene):
         all_linear_terms.target.scale(0.7)
         brace = Brace(all_linear_terms.target, UP)
         compact = TexMobject("+\\,", "n", "x^{n-1}", "\\,dx")
-        compact.highlight_by_tex("x^{n-1}", self.x_color)
-        compact.highlight_by_tex("\\,dx", self.dx_color)
+        compact.set_color_by_tex("x^{n-1}", self.x_color)
+        compact.set_color_by_tex("\\,dx", self.dx_color)
         compact.next_to(brace, UP)
         brace.add(compact)
         derivative_term = VGroup(*compact[1:3])
@@ -1628,7 +1599,7 @@ class ReactToFullExpansion(Scene):
 class OneOverX(PiCreatureScene, GraphScene):
     CONFIG = {
         "unit_length" : 3.0,    
-        "graph_origin" : (SPACE_WIDTH - LARGE_BUFF)*LEFT + 2*DOWN,
+        "graph_origin" : (FRAME_X_RADIUS - LARGE_BUFF)*LEFT + 2*DOWN,
         "rectangle_color_kwargs" : {
             "fill_color" : BLUE,
             "fill_opacity" : 0.5,
@@ -1809,7 +1780,7 @@ class OneOverX(PiCreatureScene, GraphScene):
         df_brace.add(df_label)
 
         negative = TextMobject("Negative")
-        negative.highlight(RED)
+        negative.set_color(RED)
         negative.next_to(df_label, UP+RIGHT)
         negative.shift(RIGHT)
         negative_arrow = Arrow(
@@ -2126,11 +2097,11 @@ class SquareRootOfX(Scene):
             brace.add(tex)
 
         area_increase = TextMobject("$dx$ = New area")
-        area_increase.highlight(bigger_square.get_color())
+        area_increase.set_color(bigger_square.get_color())
         area_increase.next_to(square, RIGHT, 4)
 
         question = TexMobject("\\frac{d\\sqrt{x}}{dx} = ???")
-        VGroup(*question[5:7]).highlight(bigger_square.get_color())
+        VGroup(*question[5:7]).set_color(bigger_square.get_color())
         question.next_to(
             area_increase, DOWN, 
             aligned_edge = LEFT, 
@@ -2164,7 +2135,7 @@ class NameUnitCircle(Scene):
     def construct(self):
         words = TextMobject("Unit circle")
         words.scale(2)
-        words.highlight(BLUE)
+        words.set_color(BLUE)
         self.play(Write(words))
         self.wait()
 
@@ -2174,10 +2145,10 @@ class DerivativeOfSineIsSlope(Scene):
             "\\frac{d(\\sin(\\theta))}{d\\theta} = ",
             "\\text{Slope of this graph}"
         )
-        tex.scale_to_fit_width(2*SPACE_WIDTH-1)
+        tex.scale_to_fit_width(FRAME_WIDTH-1)
         tex.to_edge(DOWN)
-        VGroup(*tex[0][2:8]).highlight(BLUE)
-        VGroup(*tex[1][-9:]).highlight(BLUE)
+        VGroup(*tex[0][2:8]).set_color(BLUE)
+        VGroup(*tex[1][-9:]).set_color(BLUE)
 
         self.play(Write(tex, run_time = 2))
         self.wait()
@@ -2221,7 +2192,7 @@ class IntroduceUnitCircleWithSine(GraphScene):
     def introduce_unit_circle(self):
         circle = self.get_unit_circle()
         radial_line = Line(ORIGIN, self.unit_length*RIGHT)
-        radial_line.highlight(RED)
+        radial_line.set_color(RED)
         if self.include_radial_line_dot:
             dot = Dot()
             dot.move_to(radial_line.get_end())
@@ -2246,7 +2217,7 @@ class IntroduceUnitCircleWithSine(GraphScene):
             ORIGIN, self.example_radians*self.unit_length*UP,
             color = YELLOW,
         )
-        line.shift(SPACE_WIDTH*RIGHT/3).to_edge(UP)
+        line.shift(FRAME_X_RADIUS*RIGHT/3).to_edge(UP)
         line.insert_n_anchor_points(10)
         line.make_smooth()
 
@@ -2254,11 +2225,11 @@ class IntroduceUnitCircleWithSine(GraphScene):
             self.example_radians, radius = self.unit_length,
             color = line.get_color(),
         )
-        arc_copy = arc.copy().highlight(WHITE)
+        arc_copy = arc.copy().set_color(WHITE)
 
         brace = Brace(line, RIGHT)
         brace_text = brace.get_text("$\\theta%s$"%self.theta_label)
-        brace_text.highlight(line.get_color())
+        brace_text.set_color(line.get_color())
         theta_copy = brace_text[0].copy()
 
         self.play(
@@ -2300,7 +2271,7 @@ class IntroduceUnitCircleWithSine(GraphScene):
         v_line = self.line_class(radial_line.get_end(), drop_point)
         brace = Brace(v_line, RIGHT)
         brace_text = brace.get_text("$\\sin(\\theta)$")
-        brace_text[-2].highlight(YELLOW)
+        brace_text[-2].set_color(YELLOW)
 
         self.play(ShowCreation(v_line))
         self.play(
@@ -2326,7 +2297,7 @@ class IntroduceUnitCircleWithSine(GraphScene):
             )
             return v_line
         filler_arc = self.circle.copy()
-        filler_arc.highlight(YELLOW)
+        filler_arc.set_color(YELLOW)
         curr_arc_portion = self.example_radians/(2*np.pi)
         filler_portion = 1 - curr_arc_portion
         filler_arc.pointwise_become_partial(filler_arc, curr_arc_portion, 1)
@@ -2443,7 +2414,7 @@ class DerivativeIntuitionFromSineGraph(GraphScene):
                     words.get_bottom(), 
                     deriv_graph.point_from_proportion(0.45)
                 )
-                VGroup(words, arrow).highlight(deriv_graph.get_color())
+                VGroup(words, arrow).set_color(deriv_graph.get_color())
                 self.play(
                     Write(words),
                     ShowCreation(arrow)
@@ -2489,7 +2460,7 @@ class DerivativeIntuitionFromSineGraph(GraphScene):
                 label = TexMobject("%d\\pi"%x)
             label.next_to(self.coords_to_point(x*np.pi, 0), DOWN, MED_LARGE_BUFF)
             self.add(label)
-        self.x_axis_label_mob.highlight(YELLOW)
+        self.x_axis_label_mob.set_color(YELLOW)
 
 class LookToFunctionsMeaning(TeacherStudentsScene):
     def construct(self):
@@ -2503,7 +2474,7 @@ class LookToFunctionsMeaning(TeacherStudentsScene):
 class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
     CONFIG = {
         "zoom_factor" : 10,
-        "zoomed_canvas_space_shape" : (3, 4.5),    
+        "zoomed_canvas_frame_shape" : (3, 4.5),
         "include_radial_line_dot" : False,
         "remove_angle_label" : False,
         "theta_label" : "",
@@ -2556,7 +2527,7 @@ class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
             d_theta_brace.get_center(), d_theta_brace.direction, 
             MED_LARGE_BUFF
         )
-        d_theta_label.highlight(d_theta_arc.get_color())
+        d_theta_label.set_color(d_theta_arc.get_color())
 
         group = VGroup(d_theta_arc, d_theta_brace, d_theta_label)
         group.scale(1./self.zoom_factor)
@@ -2573,7 +2544,7 @@ class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
         d_sine_brace.scale_to_fit_height(d_sine_line.get_height())
         d_sine_brace.next_to(d_sine_line, LEFT, buff = SMALL_BUFF/self.zoom_factor)
         d_sine = TexMobject("d(\\sin(\\theta))")
-        d_sine.highlight(d_sine_line.get_color())
+        d_sine.set_color(d_sine_line.get_color())
         d_sine.scale_to_fit_width(1.5*self.d_theta*self.unit_length)
         d_sine.next_to(d_sine_brace, LEFT, SMALL_BUFF/self.zoom_factor)
 
@@ -2607,7 +2578,7 @@ class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
             self.radial_line.get_end()[0]*RIGHT,
         )
         for triangle in little_triangle, big_triangle:
-            triangle.highlight(GREEN)
+            triangle.set_color(GREEN)
             triangle.set_fill(GREEN, opacity = 0.5)
         big_triangle_copy = big_triangle.copy()
         big_triangle_copy.next_to(ORIGIN, UP+LEFT)
@@ -2627,12 +2598,12 @@ class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
                 (UP+LEFT, DOWN+LEFT)
             ]
         ])
-        little_triangle_lines.highlight(little_triangle.get_color())
+        little_triangle_lines.set_color(little_triangle.get_color())
 
         self.play(DrawBorderThenFill(little_triangle))
         self.play(
             little_triangle.scale, 2, little_triangle.get_corner(DOWN+RIGHT),
-            little_triangle.highlight, YELLOW,
+            little_triangle.set_color, YELLOW,
             rate_func = there_and_back
         )
         self.wait()
@@ -2645,7 +2616,7 @@ class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
             ))
             self.play(
                 group.scale, 1.2, group.get_corner(DOWN+RIGHT),
-                group.highlight, YELLOW,
+                group.set_color, YELLOW,
                 rate_func = there_and_back,
             )
             self.wait()
@@ -2684,18 +2655,18 @@ class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
         )
         self.play(
             new_angle_label.scale_in_place, 2,
-            new_angle_label.highlight, RED,
+            new_angle_label.set_color, RED,
             rate_func = there_and_back
         )
         self.wait()
 
     def analyze_ratios(self):
         d_ratio = TexMobject("\\frac{d(\\sin(\\theta))}{d\\theta} = ")
-        VGroup(*d_ratio[:9]).highlight(GREEN)
-        VGroup(*d_ratio[10:12]).highlight(MAROON_B)
+        VGroup(*d_ratio[:9]).set_color(GREEN)
+        VGroup(*d_ratio[10:12]).set_color(MAROON_B)
         trig_ratio = TexMobject("\\frac{\\text{Adj.}}{\\text{Hyp.}}")
-        VGroup(*trig_ratio[:4]).highlight(GREEN)
-        VGroup(*trig_ratio[5:9]).highlight(MAROON_B)
+        VGroup(*trig_ratio[:4]).set_color(GREEN)
+        VGroup(*trig_ratio[5:9]).set_color(MAROON_B)
         cos = TexMobject("= \\cos(\\theta)")
         cos.add_background_rectangle()
 
@@ -2714,7 +2685,7 @@ class DerivativeFromZoomingInOnSine(IntroduceUnitCircleWithSine, ZoomedScene):
 class TryWithCos(Scene):
     def construct(self):
         words = TextMobject("What about $\\cos(\\theta)$?")
-        words.highlight(YELLOW)
+        words.set_color(YELLOW)
         self.play(Write(words))
         self.wait()
 
@@ -2744,7 +2715,7 @@ class NextVideo(TeacherStudentsScene):
             ]
         )
         self.play(
-            next_video.highlight, YELLOW,
+            next_video.set_color, YELLOW,
             next_video.shift, MED_LARGE_BUFF*DOWN
         )
         self.wait()
@@ -2824,14 +2795,14 @@ class Thumbnail(NudgeSideLengthOfCube):
         formula = TexMobject(
             "\\frac{d(x^3)}{dx} = 3x^2"
         )
-        VGroup(*formula[:5]).highlight(YELLOW)
-        VGroup(*formula[-3:]).highlight(GREEN_B)
-        formula.scale_to_fit_width(SPACE_WIDTH-1)
+        VGroup(*formula[:5]).set_color(YELLOW)
+        VGroup(*formula[-3:]).set_color(GREEN_B)
+        formula.scale_to_fit_width(FRAME_X_RADIUS-1)
         formula.to_edge(RIGHT)
         self.add(formula)
 
         title = TextMobject("Geometric derivatives")
-        title.scale_to_fit_width(2*SPACE_WIDTH-1)
+        title.scale_to_fit_width(FRAME_WIDTH-1)
         title.to_edge(UP)
         self.add(title)
 
